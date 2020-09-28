@@ -6,21 +6,22 @@ import org.apache.camel.impl.DefaultCamelContext;
 
 public class RotaPedidos {
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 
-		CamelContext context = new DefaultCamelContext();
-		context.addRoutes(new RouteBuilder() {
+        CamelContext context = new DefaultCamelContext();
+        context.addRoutes(new RouteBuilder() {
 
-			@Override
-			public void configure() throws Exception {
-				from("file:pedidos?delay=5s&noop=true")
-						.log("${id} - ${body}")
-						.to("file:saida");
-			}
-		});
+            @Override
+            public void configure() throws Exception {
+                from("file:pedidos?delay=5s&noop=true")
+                        .filter().xpath()
+                        .log("${id} - ${body}")
+                        .to("file:saida");
+            }
+        });
 
-		context.start();
-		Thread.sleep(5000);
-		context.stop();
-	}	
+        context.start();
+        Thread.sleep(5000);
+        context.stop();
+    }
 }
